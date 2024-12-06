@@ -13,7 +13,8 @@ from django.contrib.auth import login, authenticate
 import logging
 import json
 from django.views.decorators.csrf import csrf_exempt
-# from .populate import initiate
+from .populate import initiate
+from .models import CarMake, CarModel  # Import the CarMake and CarModel models
 
 
 # Get an instance of a logger
@@ -125,19 +126,32 @@ def registration(request):
     return JsonResponse(response_data)
 
 
-# # Update the `get_dealerships` view to render the index page with
-# a list of dealerships
-# def get_dealerships(request):
-# ...
+def get_dealerships(request):
+    url = "https://external-api.com/dealerships"
+    response = requests.get(url)
+    dealerships = response.json()
+    return JsonResponse(dealerships, safe=False)
 
-# Create a `get_dealer_reviews` view to render the reviews of a dealer
-# def get_dealer_reviews(request,dealer_id):
-# ...
+def get_dealer_reviews(request, dealer_id):
+    url = f"https://external-api.com/dealerships/{dealer_id}/reviews"
+    response = requests.get(url)
+    reviews = response.json()
+    return JsonResponse(reviews, safe=False)
 
-# Create a `get_dealer_details` view to render the dealer details
-# def get_dealer_details(request, dealer_id):
-# ...
+def add_review(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        url = "https://external-api.com/reviews"
+        response = requests.post(url, json=data)
+        return JsonResponse(response.json())
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=400)
 
-# Create a `add_review` view to submit a review
-# def add_review(request):
-# ...
+def get_cars(request):
+    count = CarMake.objects.count()
+    if count == 0:
+        initiate()
+
+    car_models = CarModel.objects.select_related('car_make')
+    cars = [{"CarModel": cm.name, "CarMake": cm.car_make.name} for cm in car_models]
+    return JsonResponse({"CarModels": cars})
