@@ -15,6 +15,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from .populate import initiate
 from .models import CarMake, CarModel  # Import the CarMake and CarModel models
+from .restapis import get_request, analyze_review_sentiments
 
 
 # Get an instance of a logger
@@ -126,26 +127,47 @@ def registration(request):
     return JsonResponse(response_data)
 
 
-def get_dealerships(request):
-    url = "https://external-api.com/dealerships"
-    response = requests.get(url)
-    dealerships = response.json()
-    return JsonResponse(dealerships, safe=False)
-
-def get_dealer_reviews(request, dealer_id):
-    url = f"https://external-api.com/dealerships/{dealer_id}/reviews"
-    response = requests.get(url)
-    reviews = response.json()
-    return JsonResponse(reviews, safe=False)
-
-def add_review(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        url = "https://external-api.com/reviews"
-        response = requests.post(url, json=data)
-        return JsonResponse(response.json())
+# Update the `get_dealerships` view
+def get_dealerships(request, state="All"):
+    """
+    Get dealerships from the backend API.
+    If a state is provided, fetch dealerships for that state only.
+    """
+    if state == "All":
+        endpoint = "/fetchDealers"
     else:
-        return JsonResponse({"error": "Invalid request method"}, status=400)
+        endpoint = f"/fetchDealers/{state}"
+    dealerships = get_request(endpoint)
+    return JsonResponse({"status": 200, "dealers": dealerships})
+
+
+# Add a `get_dealer_details` view
+def get_dealer_details(request, dealer_id):
+    """
+    Get details of a specific dealer by dealer ID.
+    """
+    if dealer_id:
+        endpoint = f"/fetchDealer/{dealer_id}"
+        dealership = get_request(endpoint)
+        return JsonResponse({"status": 200, "dealer": dealership})
+    else:
+        return JsonResponse({"status": 400, "message": "Bad Request"})
+
+
+# Add a `get_dealer_reviews` view
+def get_dealer_reviews(request, dealer_id):
+    """
+    Get reviews for a specific dealer and analyze their sentiments.
+    """
+    if dealer_id:
+        endpoint = f"/fetchReviews/dealer/{dealer_id}"
+        reviews = get_request(endpoint)
+        for review_detail in reviews:
+            response = analyze_review_sentiments(review_detail.get('review', ''))
+            review_detail['sentiment'] = response.get('sentiment', 'unknown')
+        return JsonResponse({"status": 200, "reviews": reviews})
+    else:
+        return JsonResponse({"status": 400, "message": "Bad Request"})
 
 def get_cars(request):
     count = CarMake.objects.count()
@@ -155,3 +177,35 @@ def get_cars(request):
     car_models = CarModel.objects.select_related('car_make')
     cars = [{"CarModel": cm.name, "CarMake": cm.car_make.name} for cm in car_models]
     return JsonResponse({"CarModels": cars})
+
+@csrf_exempt
+def add_review(request):
+    """
+    Handle a request to add a review. Only authenticated users can post reviews.
+
+    Args:
+        request: The Django request object.
+
+    Returns:
+        JsonResponse: JSON response indicating success or failure.
+    """
+    if not request.user.is_authenticated:
+        return JsonResponse({"status": 403, "message": "Unauthorized"})
+
+    if request.method == "POST":
+        try:
+            # Parse the request body into a dictionary
+            data = json.loads(request.body.decode("utf-8"))
+
+            # Call the post_review function with the data
+            response = post_review(data)
+
+            # Return the response from the backend
+            return JsonResponse({"status": 200, "message": "Review added successfully", "response": response})
+        except json.JSONDecodeError:
+            return JsonResponse({"status": 400, "message": "Invalid JSON data"})
+        except Exception as e:
+            print(f"Error during review posting: {e}")
+            return JsonResponse({"status": 500, "message": "Internal server error"})
+    else:
+        return JsonResponse({"status": 405, "message": "Method not allowed"})
