@@ -1,68 +1,138 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <!-- Link the style sheet here -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
+  <title>About Us - Best Cars Dealership</title>
+  <style>
+    .navbar {
+      background-color: #20b2aa;
+      height: 60px;
+    }
+
+    .navbar h2 {
+      color: white;
+      margin: 0;
+    }
+
+    .banner {
+      text-align: center;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f0f8ff;
+      border-radius: 10px;
+    }
+
+    .banner h1 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .card {
+      margin: 15px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      border: none;
+    }
+
+    .card-body {
+      text-align: center;
+    }
+
+    .title {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .about-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+  </style>
 </head>
-<div>
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
-    <div class="container-fluid">
-      <h2 style="padding-right: 5%;">Dealerships</h2>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" style="font-size: larger;" aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" style="font-size: larger;" href="/about">About Us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" style="font-size: larger;" href="/contact">Contact Us</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  
-    <div class="card" style="width: 80%;margin: auto; margin-top:5%;">
-      <div class="banner" name="about-header">
-      <!-- Insert header information here -->
-      </div>
-      <div style="display: flex;flex-direction: row; margin:auto">
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
-        <div class="card-body">
-          <p class="title">Person1</p>
-          <p>Person1 Title</p>
-          <p class="card-text">Some text that explains the person1 in about 2 short sentences</p>
-          <p>person1@example.com</p>
-        </div>
-      </div>
 
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
-        <div class="card-body">
-          <p class="title">Person2</p>
-          <p>Person2 Title</p>
-          <p class="card-text">Some text that explains the person2 in about 2 short sentences</p>
-          <p>person2@example.com</p>
+<body>
+  <div>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <h2>Best Cars Dealership</h2>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+          aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" style="font-size: larger;" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" style="font-size: larger;" href="/about">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="font-size: larger;" href="/contact">Contact Us</a>
+            </li>
+          </ul>
         </div>
       </div>
+    </nav>
 
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
-        <div class="card-body">
-          <p class="title">Person3</p>
-          <p>Person3 Title</p>
-          <p class="card-text">Some text that explains the person3 in about 2 short sentences</p>
-          <p>person3@example.com</p>
+    <div class="card" style="width: 90%; margin: auto; margin-top: 5%;">
+      <div class="banner">
+        <h1>About Us</h1>
+        <p>
+          At Best Cars Dealership, we believe in providing top-quality vehicles and exceptional service to our customers
+          across the United States.
+          With over 20 years of experience in the automotive industry, our mission is to deliver transparency, trust,
+          and excellence in every transaction.
+          Whether you are looking for a reliable family car or a luxury ride, we have something for everyone.
+        </p>
+      </div>
+      <div class="about-container">
+        <div class="card" style="width: 30%;">
+          <img class="card-img-top" src="/static/profile.jpg" alt="Jane Doe">
+          <div class="card-body">
+            <p class="title">Cody Marsengill</p>
+            <p>CEO & Founder</p>
+            <p class="card-text">
+              Cody has been leading Best Cars Dealership with a vision of creating a customer-first automotive
+              experience. With over 25 years of industry expertise, his leadership drives our success.
+            </p>
+            <p>cody.marsengill@bestcars.com</p>
+          </div>
+        </div>
+
+        <div class="card" style="width: 30%;">
+          <img class="card-img-top" src="/static/john-smith.jpg" alt="John Smith">
+          <div class="card-body">
+            <p class="title">John Smith</p>
+            <p>Head of Operations</p>
+            <p class="card-text">
+              John ensures the smooth functioning of all branches nationwide. He specializes in customer satisfaction
+              and operational efficiency.
+            </p>
+            <p>john.smith@bestcars.com</p>
+          </div>
+        </div>
+
+        <div class="card" style="width: 30%;">
+          <img class="card-img-top" src="/static/emily-davis.jpg" alt="Emily Davis">
+          <div class="card-body">
+            <p class="title">Emily Davis</p>
+            <p>Marketing Director</p>
+            <p class="card-text">
+              Emily heads our marketing campaigns, ensuring our values and services reach customers effectively. She
+              brings creative strategies to our brand.
+            </p>
+            <p>emily.davis@bestcars.com</p>
+          </div>
         </div>
       </div>
     </div>
-    </div>
-    </div>
-    
-</div>
+  </div>
+</body>
 
 </html>
